@@ -1,0 +1,38 @@
+import pandas as pd
+import seaborn as sns
+
+def reorganize_csv_seaborn(dataset_name, output_file):
+    # Load dataset from Seaborn
+    df = sns.load_dataset(dataset_name)
+
+    # Extract all unique SAMPLE_IDs and cytokine names
+    sample_ids = df["SAMPLE_ID"]
+    cytokines = df.columns[1:]  # Exclude "SAMPLE_ID"
+
+    # Ensure each cytokine gets 108 sample IDs in correct order
+    sample_ids_repeated = sample_ids.tolist() * len(cytokines)  # Repeat the whole order
+
+    # Expand cytokine labels in correct order
+    cyt_labels = [cyt for cyt in cytokines for _ in range(len(sample_ids))]
+
+    # Extract corresponding zsc values
+    zsc_values = []
+    for cyt in cytokines:
+        zsc_values.extend(df[cyt].tolist())  # Append values while keeping sample order
+
+    # Create new DataFrame
+    new_df = pd.DataFrame({
+        "SAMPLE_ID": sample_ids_repeated,
+        "cyt": cyt_labels,
+        "zsc": zsc_values
+    })
+
+    # Save the transformed DataFrame
+    new_df.to_csv(output_file, index=False)
+    print(f"Reorganized CSV saved to {output_file}")
+
+# Example Usage
+dataset_name = "colorectal_323"  # Change this to your actual dataset name in Seaborn
+output_file = r"C:\TRANSFORMED_CYTO\colorectal_323_transformed_fixed.csv"  # Change path if needed
+
+reorganize_csv_seaborn(dataset_name, output_file)
