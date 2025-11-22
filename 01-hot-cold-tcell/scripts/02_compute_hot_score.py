@@ -35,6 +35,17 @@ FILES = {
     "prostate":   r"C:\TRANSFORMED_CYTO\323\prostatecorr_323_transformed_fixed.csv",
 }
 
+DATA_SEARCH_PATHS = ["data", "01-hot-cold-tcell/data", "02-pdl1-corr-323genes/data"]
+import os
+def prefer_any(p):
+    fn = os.path.basename(p)
+    for root in DATA_SEARCH_PATHS:
+        cand = os.path.join(root, fn)
+        if os.path.exists(cand):
+            return cand
+    return p
+FILES = {ct: prefer_any(p) for ct, p in FILES.items()}
+
 OUTDIR = "."                 # keep outputs in current folder for identical behavior
 INPUT_SHAPE = "tidy"        # our exports are tidy: [SAMPLE_ID, cyt, zsc]
 VALUE_COL   = "zsc"         # column name in the CSVs
