@@ -3,5 +3,8 @@ __pycache__/
 *.pyc
 .env/
 .venv/
-data/
+01-hot-cold-tcell/data/*
+!01-hot-cold-tcell/data/.gitkeep
+02-pdl1-corr-323genes/data/*
+!02-pdl1-corr-323genes/data/.gitkeep
 figures/
