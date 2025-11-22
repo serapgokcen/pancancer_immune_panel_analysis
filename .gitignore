@@ -3,9 +3,14 @@ __pycache__/
 *.pyc
 .env/
 .venv/
+data/*
+!data/pancreatic_323_transformed_fixed.csv
+!data/.gitkeep
 01-hot-cold-tcell/data/*
 !01-hot-cold-tcell/data/.gitkeep
 02-pdl1-corr-323genes/data/*
 !02-pdl1-corr-323genes/data/.gitkeep
 figures/
 !01-hot-cold-tcell/data/example_tcell_heatmap_tidy.csv
+.DS_Store
+Thumbs.db
