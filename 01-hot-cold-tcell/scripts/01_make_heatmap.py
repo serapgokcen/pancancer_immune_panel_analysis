@@ -22,6 +22,17 @@ from typing import List, Dict
 SOURCE = r"C:\TRANSFORMED_CYTO\323\colorectalcorr_323_transformed_fixed.csv"   # or "BREAST_ALL_transformed_fixed"
 VALUE_CANDIDATES = ("zsc", "value")
 
+DATA_SEARCH_PATHS = ["data", "01-hot-cold-tcell/data", "02-pdl1-corr-323genes/data"]
+import os
+def prefer_any_file(p):
+    fn = os.path.basename(p)
+    for root in DATA_SEARCH_PATHS:
+        cand = os.path.join(root, fn)
+        if os.path.exists(cand):
+            return cand
+    return p
+SOURCE = prefer_any_file(SOURCE)
+
 # Panels (tweak to your dataset)
 T_ABUNDANCE = ['CD3D','CD3E','CD8A','PTPRC']             # quantity
 PEX         = ['SLAMF6','CCR7','TCF7']                   # progenitor-exhausted
