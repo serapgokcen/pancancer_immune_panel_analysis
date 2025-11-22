@@ -1,7 +1,6 @@
-pandas
 numpy
+pandas
 matplotlib
 seaborn
-scipy
-scikit-learn
-pyyaml
+# optional, enables hierarchical clustering; otherwise code falls back
+# scipy
