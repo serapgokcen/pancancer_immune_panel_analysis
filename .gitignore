@@ -11,6 +11,8 @@ data/*
 02-pdl1-corr-323genes/data/*
 !02-pdl1-corr-323genes/data/.gitkeep
 figures/
+!01-hot-cold-tcell/figures/
+!01-hot-cold-tcell/figures/pancreatic_323_transformed_fixed_heatmap_example.png
 !01-hot-cold-tcell/data/example_tcell_heatmap_tidy.csv
 .DS_Store
 Thumbs.db
