@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 """
 PD1/PDL1 project — Hot/Intermediate/Cold via Abundance + Activation vs Exhaustion (zsc)
 ---------------------------------------------------------------------------------------
@@ -22,8 +19,67 @@ PD1/PDL1 project — Hot/Intermediate/Cold via Abundance + Activation vs Exhaust
    - activation_summary_by_cancer.csv (fractions, CIs, medians, WHC, HI, HSS)
 """
 
+import argparse
+from pathlib import Path, PureWindowsPath
+import os
+import sys
+import numpy as np
+import pandas as pd
+from typing import List, Tuple, Dict
+
+# -----------------------------------------------------------------------------
+# Repo-safe path resolver:
+# - Keeps your original Windows FILES untouched.
+# - If the Windows path doesn't exist (Codespaces/Linux),
+#   it searches the repo for the same filename.
+# -----------------------------------------------------------------------------
+
+SEARCH_DIRS = [
+    Path("./data"),
+    Path("./01-hot-cold-tcell/data"),
+    Path("./02-pdl1-corr-323genes/data"),
+]
+
+def resolve_repo_path(original_path: str) -> Path:
+    p = Path(original_path)
+
+    # 1) If original path exists (your Windows machine), use it
+    if p.exists():
+        return p
+
+    # 2) Otherwise try to find by filename inside repo search dirs
+    fname = PureWindowsPath(original_path).name  # e.g., "BRCA.csv"
+    for d in SEARCH_DIRS:
+        candidate = d / fname
+        if candidate.exists():
+            return candidate
+
+    # 3) Not found anywhere
+    return p  # return original, caller decides what to do
+
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--only",
+        nargs="*",
+        default=None,
+        help="Run only selected cancers, e.g. --only melanoma lung"
+    )
+    ap.add_argument(
+        "--allow-missing",
+        action="store_true",
+        help="If set, missing files are skipped with a warning (demo/Codespaces mode)."
+    )
+    ap.add_argument(
+        "--outdir",
+        default="results",
+        help="Output directory for tables/figures."
+    )
+    return ap.parse_args()
+
+
 # =========================
-# CONFIG — EDIT PATHS IF NEEDED
+# CONFIG — KEEP WINDOWS PATHS
 # =========================
 FILES = {
     "melanoma":   r"C:\TRANSFORMED_CYTO\323\melanoma_323_transformed_fixed.csv",   # should include abundance/exhaustion genes too
@@ -35,18 +91,61 @@ FILES = {
     "prostate":   r"C:\TRANSFORMED_CYTO\323\prostatecorr_323_transformed_fixed.csv",
 }
 
-DATA_SEARCH_PATHS = ["data", "01-hot-cold-tcell/data", "02-pdl1-corr-323genes/data"]
-import os
-def prefer_any(p):
-    fn = os.path.basename(p)
-    for root in DATA_SEARCH_PATHS:
-        cand = os.path.join(root, fn)
-        if os.path.exists(cand):
-            return cand
-    return p
-FILES = {ct: prefer_any(p) for ct, p in FILES.items()}
+# =========================
+# ARGUMENTS + FILE RESOLUTION
+# =========================
+args = parse_args()
 
-OUTDIR = "."                 # keep outputs in current folder for identical behavior
+# output directory (Path)
+OUTDIR = Path(args.outdir)
+OUTDIR.mkdir(parents=True, exist_ok=True)
+
+# decide which cancers to run
+selected = args.only if args.only else list(FILES.keys())
+
+# filter to valid keys (avoid typos)
+valid_selected = []
+invalid = []
+for k in selected:
+    if k in FILES:
+        valid_selected.append(k)
+    else:
+        invalid.append(k)
+
+if invalid:
+    print(f"[WARN] These --only keys are not in FILES and will be ignored: {invalid}")
+
+# resolve paths
+RESOLVED_FILES: Dict[str, str] = {}
+missing = []
+for cancer in valid_selected:
+    rp = resolve_repo_path(FILES[cancer])
+    if rp.exists():
+        RESOLVED_FILES[cancer] = str(rp)  # keep downstream expecting str paths
+    else:
+        missing.append((cancer, str(rp)))
+
+# enforce "require all" unless --allow-missing
+if missing and not args.allow_missing:
+    msg = "\n".join([f"  - {c}: {p}" for c, p in missing])
+    raise SystemExit(
+        "Missing required cancer CSVs (full 7-cancer run needs all files).\n"
+        "Either add the missing files to the repo data folders, or run with --allow-missing for demo.\n"
+        f"Missing:\n{msg}"
+    )
+
+# demo mode warning if skipping
+if missing and args.allow_missing:
+    msg = "\n".join([f"  - {c}: {p}" for c, p in missing])
+    print("[WARN] Running in demo mode, skipping missing cancers:\n" + msg)
+
+# overwrite FILES so the rest of your script uses resolved paths automatically
+FILES = RESOLVED_FILES
+
+
+# =========================
+# PROJECT SETTINGS (UNCHANGED)
+# =========================
 INPUT_SHAPE = "tidy"        # our exports are tidy: [SAMPLE_ID, cyt, zsc]
 VALUE_COL   = "zsc"         # column name in the CSVs
 USE_RANK_FALLBACK = False   # Set True to use pooled rank→N(0,1) instead of supplied z-scores.
@@ -83,14 +182,6 @@ GATE_STAT  = "mean"         # "mean" or "median"
 # Optional: use a smooth weight instead of a hard flip (helps near the threshold)
 GATE_STYLE = "binary"       # "binary" or "tanh"
 GATE_K     = 0.75           # slope for tanh; used only if GATE_STYLE=="tanh"
-
-# =========================
-# LIBS & HELPERS
-# =========================
-import os
-import numpy as np
-import pandas as pd
-from typing import List, Tuple, Dict
 
 rng = np.random.default_rng(42)
 
@@ -141,15 +232,18 @@ def inv_norm_cdf(p):
     m = p < plow
     if m.any():
         pp = p[m]; t = np.sqrt(-2*np.log(pp))
-        q[m] = (((((c[0]*t + c[1])*t + c[2])*t + c[3])*t + c[4])*t + c[5]) /                ((((d[0]*t + d[1])*t + d[2])*t + d[3])*t + 1)
+        q[m] = (((((c[0]*t + c[1])*t + c[2])*t + c[3])*t + c[4])*t + c[5]) / \
+                ((((d[0]*t + d[1])*t + d[2])*t + d[3])*t + 1)
     m = (p >= plow) & (p <= phigh)
     if m.any():
         pp = p[m] - 0.5; t2 = pp*pp
-        q[m] = (((((a[0]*t2 + a[1])*t2 + a[2])*t2 + a[3])*t2 + a[4])*t2 + a[5]) * pp /                (((((b[0]*t2 + b[1])*t2 + b[2])*t2 + b[3])*t2 + b[4])*t2 + 1)
+        q[m] = (((((a[0]*t2 + a[1])*t2 + a[2])*t2 + a[3])*t2 + a[4])*t2 + a[5]) * pp / \
+                (((((b[0]*t2 + b[1])*t2 + b[2])*t2 + b[3])*t2 + b[4])*t2 + 1)
     m = p > phigh
     if m.any():
         pp = 1 - p[m]; t = np.sqrt(-2*np.log(pp))
-        q[m] = -(((((c[0]*t + c[1])*t + c[2])*t + c[3])*t + c[4])*t + c[5]) /                  ((((d[0]*t + d[1])*t + d[2])*t + d[3])*t + 1)
+        q[m] = -(((((c[0]*t + c[1])*t + c[2])*t + c[3])*t + c[4])*t + c[5]) / \
+                  ((((d[0]*t + d[1])*t + d[2])*t + d[3])*t + 1)
     return q
 
 def pooled_rank_to_norm(series: pd.Series) -> pd.Series:
@@ -440,19 +534,11 @@ if __name__ == "__main__":
     )
 
     # save (keep same filenames; location controlled by OUTDIR)
-    os.makedirs(OUTDIR, exist_ok=True)
-    labels_df.to_csv(os.path.join(OUTDIR, LABELS_OUT), index=False)
-    summary_df.to_csv(os.path.join(OUTDIR, SUMMARY_OUT), index=False)
+    labels_df.to_csv(OUTDIR / LABELS_OUT, index=False)
+    summary_df.to_csv(OUTDIR / SUMMARY_OUT, index=False)
 
     print("\nSaved:")
-    print(" -", os.path.join(OUTDIR, LABELS_OUT))
-    print(" -", os.path.join(OUTDIR, SUMMARY_OUT))
+    print(" -", str(OUTDIR / LABELS_OUT))
+    print(" -", str(OUTDIR / SUMMARY_OUT))
     print("\nPreview (labels):\n", labels_df.head(10).to_string(index=False))
     print("\nPreview (summary):\n", summary_df.head(10).to_string(index=False))
-
-
-# In[ ]:
-
-
-
-
