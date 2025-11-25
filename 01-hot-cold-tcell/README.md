@@ -1,8 +1,8 @@
-#01-hot-cold-tcell
+# 01-hot-cold-tcell
 
 Hot / Intermediate / Cold T-cell classification using T-cell panels.
 
-##Scripts
+## Scripts
 
 scripts/01_make_heatmap.py
 Builds clustered, scaled heatmaps from tidy expression tables.
@@ -12,7 +12,7 @@ Computes T-cell abundance, activation, PEX and TEX indices, HotScore (Z),
 p_consistency, per-sample labels (hot / intermediate-hot / intermediate-cold / cold),
 and per-cancer summary metrics (fractions, CIs, medians, WHC, HI, HSS).
 
-##Data (not included)
+## Data (not included)
 
 The full TCGA-derived CSVs are not stored in this repo.
 
@@ -28,7 +28,7 @@ Each CSV should be tidy with columns:
 
 SAMPLE_ID, cyt, zsc
 
-##Quick start
+## Quick start
 
 From the repository root, install dependencies:
 
@@ -42,7 +42,7 @@ python scripts/01_make_heatmap.py
 Hot / intermediate / cold classification:
 python scripts/02_compute_hot_score.py --outdir results
 
-##Outputs
+## Outputs
 
 From scripts/01_make_heatmap.py:
 
