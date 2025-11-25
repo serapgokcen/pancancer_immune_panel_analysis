@@ -16,3 +16,5 @@ figures/
 !01-hot-cold-tcell/data/example_tcell_heatmap_tidy.csv
 .DS_Store
 Thumbs.db
+# do not upload big/private CSVs
+*.csv
