@@ -1,22 +1,55 @@
-# 01-hot-cold-tcell
+01-hot-cold-tcell
 
-Scripts for hot/cold profiling using T-cell panels.
+Hot / Intermediate / Cold T-cell classification using T-cell panels.
 
-## Files
-- `scripts/01_make_heatmap.py` – builds clustered, scaled heatmaps.
-- `scripts/02_compute_hot_score.py` – computes T/Activation/PEX/TEX indices, HotScore (Z), p_consistency, labels, and per-cancer summaries.
+Scripts
 
-## Data (not included)
-Place CSVs here: `01-hot-cold-tcell/data/`  
-Format (tidy): `SAMPLE_ID, cyt, zsc`
+scripts/01_make_heatmap.py
+Builds clustered, scaled heatmaps from tidy expression tables.
 
-## Quick start
-```bash
+scripts/02_compute_hot_score.py
+Computes T-cell abundance, activation, PEX and TEX indices, HotScore (Z),
+p_consistency, per-sample labels (hot / intermediate-hot / intermediate-cold / cold),
+and per-cancer summary metrics (fractions, CIs, medians, WHC, HI, HSS).
+
+Data (not included)
+
+The full TCGA-derived CSVs are not stored in this repo.
+
+Place your tidy CSVs in one of these locations (the script will search them in order):
+
+./data/
+
+./01-hot-cold-tcell/data/
+
+./02-pdl1-corr-323genes/data/
+
+Each CSV should be tidy with columns:
+
+SAMPLE_ID, cyt, zsc
+
+Quick start
+
+From the repository root, install dependencies:
+
 pip install -r ../../requirements.txt
-python scripts/01_make_heatmap.py
-python scripts/02_compute_hot_score.py
 
-## Outputs
-- `activation_labels_per_sample.csv` — per-sample table (SAMPLE_ID, cancer_type, HotScore, Z, p_consistency, panel indices, group).
-- `activation_summary_by_cancer.csv` — per-cancer summary (N, class fractions with CIs, median Zs, WHC, HI, HSS).
-*Save location*: controlled by `OUTDIR` in `scripts/02_compute_hot_score.py` (currently `"."`, so files appear where you run the script).
+Then, from the 01-hot-cold-tcell folder:
+
+Heatmap generation:
+python scripts/01_make_heatmap.py
+
+Hot / intermediate / cold classification:
+python scripts/02_compute_hot_score.py --outdir results
+
+Outputs
+
+From scripts/01_make_heatmap.py:
+
+One or more clustered, scaled heatmap figure files (e.g. PNG/PDF), saved in the working directory or in the output location configured inside the script.
+
+From scripts/02_compute_hot_score.py (written to the directory given by --outdir, e.g. results/):
+
+activation_labels_per_sample.csv – per-sample table (SAMPLE_ID, cancer_type, HotScore, Z, p_consistency, panel indices, group).
+
+activation_summary_by_cancer.csv – per-cancer summary (N, class fractions with Wilson CIs, median Zs for hot/cold sides, WHC, HI, HSS).
