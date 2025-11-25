@@ -75,6 +75,7 @@ def parse_args():
         default="results",
         help="Output directory for tables/figures."
     )
+
     # Notebook/IPython-safe: ignore unknown args like "-f kernel-xxxx.json"
     args, _ = ap.parse_known_args()
     return args
