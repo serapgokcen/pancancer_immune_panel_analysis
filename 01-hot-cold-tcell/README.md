@@ -32,7 +32,7 @@ Quick start
 
 From the repository root, install dependencies:
 
-pip install -r ../../requirements.txt
+pip install -r requirements.txt
 
 Then, from the 01-hot-cold-tcell folder:
 
