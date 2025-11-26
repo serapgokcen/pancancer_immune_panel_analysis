@@ -26,7 +26,7 @@ seven cancer types are stored in the root `data/` directory:
 - `data/prostatecorr_323_transformed_fixed.csv`
 
 Each CSV is tidy, with columns:
-SAMPLE_ID, cyt, zsc
+`SAMPLE_ID`, `cyt`, `zsc`
 
 ## Quick start
 
@@ -46,12 +46,14 @@ python scripts/02_compute_hot_score.py --outdir results
 
 ## Outputs
 
-From scripts/01_make_heatmap.py:
+From `scripts/01_make_heatmap.py`:
 
-One or more clustered, scaled heatmap figure files (e.g. PNG/PDF), saved in the working directory or in the output location configured inside the script.
+-One or more clustered, scaled heatmap figure files (e.g. PNG/PDF), saved in the working directory or in the output location configured inside the script.
 
-From scripts/02_compute_hot_score.py (written to the directory given by --outdir, e.g. results/):
+From `scripts/02_compute_hot_score.py` (written to the directory given by `--outdir`, e.g. `results/`):
 
-activation_labels_per_sample.csv – per-sample table (SAMPLE_ID, cancer_type, HotScore, Z, p_consistency, panel indices, group).
+-`activation_labels_per_sample.csv` – per-sample table 
+(`SAMPLE_ID`, `cancer_type`, `HotScore`, `Z`, `p_consistency`, panel indices, `group`).
 
-activation_summary_by_cancer.csv – per-cancer summary (N, class fractions with Wilson CIs, median Zs for hot/cold sides, WHC, HI, HSS).
+-`activation_summary_by_cancer.csv` – per-cancer summary 
+(`N`, class fractions with Wilson CIs, median Zs for hot/cold sides, WHC, HI, HSS).
