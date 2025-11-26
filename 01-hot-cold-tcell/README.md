@@ -26,8 +26,6 @@ seven cancer types are stored in the root `data/` directory:
 - `data/prostatecorr_323_transformed_fixed.csv`
 
 Each CSV is tidy, with columns:
-
-text
 SAMPLE_ID, cyt, zsc
 
 ## Quick start
