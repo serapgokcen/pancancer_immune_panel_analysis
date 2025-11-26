@@ -57,3 +57,10 @@ From `scripts/02_compute_hot_score.py` (written to the directory given by `--out
 
 -`activation_summary_by_cancer.csv` – per-cancer summary 
 (`N`, class fractions with Wilson CIs, median Zs for hot/cold sides, WHC, HI, HSS).
+
+
+## Example output
+
+Example hot / intermediate / cold classification heatmap:
+
+![Example hot/cold T-cell heatmap](Example_hot-cold_T-cell_heatmap.png)
