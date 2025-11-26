@@ -83,3 +83,17 @@ pdl1_corr_323genes_upsetplot.png – UpSet plot of gene-set intersections.
 Gene_intersections.xlsx – table listing each intersection, its gene count,
 and the gene names.
 
+## Example outputs
+
+CD274-centred correlation heatmap:
+
+![CD274 correlation heatmap](pdl1_corr_heatmap_pancreatic.png)
+
+Compact correlation strip heatmap:
+
+![Correlation strip heatmap](pdl1_corr_strip_pancreatic.png)
+
+UpSet plot of shared positively correlated genes:
+
+![PDL1 correlation UpSet plot](pdl1_corr_upset_all_cancers.png)
+
