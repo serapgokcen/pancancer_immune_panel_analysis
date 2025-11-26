@@ -28,6 +28,6 @@ From the repository root:
 `pip install -r requirements.txt`
 
 Then see the workflow-specific README files for details:
--01-hot-cold-tcell/README.md
--02-pdl1-corr-323genes/README.md
+-`01-hot-cold-tcell/README.md`
+-`02-pdl1-corr-323genes/README.md`
 
