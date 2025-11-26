@@ -63,4 +63,4 @@ From `scripts/02_compute_hot_score.py` (written to the directory given by `--out
 
 Example hot / intermediate / cold classification heatmap:
 
-![Example hot/cold T-cell heatmap](Example_hot-cold_T-cell_heatmap.png)
+![Example hot/cold T-cell heatmap](Example hot-cold T-cell heatmap.png)
