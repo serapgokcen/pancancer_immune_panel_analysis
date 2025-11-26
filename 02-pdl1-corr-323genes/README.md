@@ -34,27 +34,27 @@ SAMPLE_ID, cyt, zsc
 
 One gene symbol per row. Examples:
 
-data/MEL-T-COM_genes_pos_correlated_rge0.5.csv
-data/bladder_genes_pos_correlated_rge0.5.csv
-data/brainlower_genes_pos_correlated_rge0.5.csv
-data/breast_genes_pos_correlated_rge0.5.csv
-data/cervical_genes_pos_correlated_rge0.5.csv
-data/colorectalcorrgreen_genes_pos_correlated_rge0.5.csv
-data/esophagealcorr_genes_pos_correlated_rge0.5.csv
-data/glioblastoma_genes_pos_correlated_rge0.5.csv
-data/headandneck_genes_pos_correlated_rge0.5.csv
-data/kidneyrenalclear_genes_pos_correlated_rge0.5.csv
-data/kidneyrenalpapil_genes_pos_correlated_rge0.5.csv
-data/liverhepato_genes_pos_correlated_rge0.5.csv
-data/lung_genes_pos_correlated_rge0.5.csv
-data/lungsquamous_genes_pos_correlated_rge0.5.csv
-data/ovariancorr_genes_pos_correlated_rge0.5.csv
-data/pancreatic_genes_pos_correlated_rge0.5.csv
-data/pheochromocytoma_genes_pos_correlated_rge0.5.csv
-data/prostatecorr_genes_pos_correlated_rge0.5.csv
-data/sarcoma_genes_pos_correlated_rge0.5.csv
-data/stomachcorr_genes_pos_correlated_rge0.5.csv
-data/thyroid_genes_pos_correlated_rge0.5.csv
+- `data/MEL-T-COM_genes_pos_correlated_rge0.5.csv`
+- `data/bladder_genes_pos_correlated_rge0.5.csv`
+- `data/brainlower_genes_pos_correlated_rge0.5.csv`
+- `data/breast_genes_pos_correlated_rge0.5.csv`
+- `data/cervical_genes_pos_correlated_rge0.5.csv`
+- `data/colorectalcorrgreen_genes_pos_correlated_rge0.5.csv`
+- `data/esophagealcorr_genes_pos_correlated_rge0.5.csv`
+- `data/glioblastoma_genes_pos_correlated_rge0.5.csv`
+- `data/headandneck_genes_pos_correlated_rge0.5.csv`
+- `data/kidneyrenalclear_genes_pos_correlated_rge0.5.csv`
+- `data/kidneyrenalpapil_genes_pos_correlated_rge0.5.csv`
+- `data/liverhepato_genes_pos_correlated_rge0.5.csv`
+- `data/lung_genes_pos_correlated_rge0.5.csv`
+- `data/lungsquamous_genes_pos_correlated_rge0.5.csv`
+- `data/ovariancorr_genes_pos_correlated_rge0.5.csv`
+- `data/pancreatic_genes_pos_correlated_rge0.5.csv`
+- `data/pheochromocytoma_genes_pos_correlated_rge0.5.csv`
+- `data/prostatecorr_genes_pos_correlated_rge0.5.csv`
+- `data/sarcoma_genes_pos_correlated_rge0.5.csv`
+- `data/stomachcorr_genes_pos_correlated_rge0.5.csv`
+- `data/thyroid_genes_pos_correlated_rge0.5.csv`
 
 The scripts first try the original Windows paths; if those are not present,
 they fall back to these filenames in ./data/.
