@@ -27,8 +27,8 @@ seven cancer types are stored in the root `data/` directory:
 
 Each CSV is tidy, with columns:
 
-```text
-SAMPLE_ID, cyt, zsc```
+text
+SAMPLE_ID, cyt, zsc
 
 ## Quick start
 
