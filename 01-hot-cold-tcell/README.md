@@ -4,43 +4,47 @@ Hot / Intermediate / Cold T-cell classification using T-cell panels.
 
 ## Scripts
 
-scripts/01_make_heatmap.py
-Builds clustered, scaled heatmaps from tidy expression tables.
+- `scripts/01_make_heatmap.py`  
+  Builds clustered, scaled heatmaps from tidy expression tables.
 
-scripts/02_compute_hot_score.py
-Computes T-cell abundance, activation, PEX and TEX indices, HotScore (Z),
-p_consistency, per-sample labels (hot / intermediate-hot / intermediate-cold / cold),
-and per-cancer summary metrics (fractions, CIs, medians, WHC, HI, HSS).
+- `scripts/02_compute_hot_score.py`  
+  Computes T-cell abundance, activation, PEX and TEX indices, HotScore (Z),
+  p_consistency, per-sample labels (hot / intermediate-hot / intermediate-cold / cold),
+  and per-cancer summary metrics (fractions, CIs, medians, WHC, HI, HSS).
 
-## Data (not included)
+## Data
 
-The full TCGA-derived CSVs are not stored in this repo.
+Processed TCGA PanCancer Atlas z-score tables (323 immune-related genes) for
+seven cancer types are stored in the root `data/` directory:
 
-Place your tidy CSVs in one of these locations (the script will search them in order):
+- `data/melanoma_323_transformed_fixed.csv`
+- `data/breast_323_transformed_fixed.csv`
+- `data/colorectalcorr_323_transformed_fixed.csv`
+- `data/lung_323_transformed_fixed.csv`
+- `data/ovariancorr_323_transformed_fixed.csv`
+- `data/pancreatic_323_transformed_fixed.csv`
+- `data/prostatecorr_323_transformed_fixed.csv`
 
-./data/
+Each CSV is tidy, with columns:
 
-./01-hot-cold-tcell/data/
-
-./02-pdl1-corr-323genes/data/
-
-Each CSV should be tidy with columns:
-
+```text
 SAMPLE_ID, cyt, zsc
 
 ## Quick start
 
-From the repository root, install dependencies:
+From the repository root:
 
 pip install -r requirements.txt
+cd 01-hot-cold-tcell
 
 Then, from the 01-hot-cold-tcell folder:
 
-Heatmap generation:
+# Heatmap generation (optional)
 python scripts/01_make_heatmap.py
 
-Hot / intermediate / cold classification:
+# Hot / intermediate / cold classification
 python scripts/02_compute_hot_score.py --outdir results
+
 
 ## Outputs
 
